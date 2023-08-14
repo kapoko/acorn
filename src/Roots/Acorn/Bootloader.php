@@ -325,10 +325,16 @@ class Bootloader
      */
     protected function usePaths(): array
     {
-        $paths = [];
+        $paths = apply_filters('acorn/paths', [
+            'app' => null,
+            'config' => null,
+            'storage' => null,
+            'resources' => null,
+            'public' => null,
+        ]);
 
-        foreach (['app', 'config', 'storage', 'resources', 'public'] as $path) {
-            $paths[$path] = $this->normalizeApplicationPath($path, null);
+        foreach ($paths as $key => $path) {
+            $paths[$key] = $this->normalizeApplicationPath(apply_filters("acorn/paths.{$key}", $path ?: $key));
         }
 
         $paths['bootstrap'] = $this->normalizeApplicationPath($path, "{$paths['storage']}/framework");
